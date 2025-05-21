@@ -15,7 +15,17 @@ builder.Services.Configure<GitHubSettings>(
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IGitHubService, GitHubService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder => builder.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
+
+
 var app = builder.Build();
+app.UseCors("AllowReactApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
